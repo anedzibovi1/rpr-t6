@@ -119,47 +119,9 @@ public class Controller {
         return (!mjesto.getEditor().getText().equals("") && unos.length() >= 1 && unos.length() <= 40 && Character.isUpperCase(unos.charAt(0)));
     }
 
-    private void popuniOdsjek() {
-        odsjek.getItems().addAll(
-                "Automatika i elektronika",
-                "Elektroenergetika",
-                "Računarstvo",
-                "Telekomunikacije"
-        );
-    }
-
-    private void popuniGodinu() {
-        ObservableList<String> god = FXCollections.observableArrayList(
-                new String("Element 1"),
-                new String("Element 2")
-        );
-        godina.setItems(god);
-        godina.getSelectionModel().selectFirst();
-    }
-
-    private void popuniCiklus() {
-        ciklus.getItems().add("Bachelor");
-        ciklus.getItems().add("Master");
-        ciklus.getItems().add("Doktorski studij");
-        ciklus.getItems().add("Stručni studij");
-    }
-
-    private void popuniMjesto() {
-        mjesto.getItems().add("Sarajevo");
-        mjesto.getItems().add("Banja Luka");
-        mjesto.getItems().add("Tuzla");
-        mjesto.getItems().add("Zenica");
-        mjesto.getItems().add("Bijeljina");
-        mjesto.getItems().add("Mostar");
-    }
 
     @FXML
     public void Initialize() {
-        popuniCiklus();
-        popuniGodinu();
-        popuniMjesto();
-        popuniOdsjek();
-
         IspravanJMBG=false;
         IspravanIndeks=false;
         IspravnoIme=false;
