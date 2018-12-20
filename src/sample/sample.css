@@ -1,7 +1,7 @@
 .ispravno{
-    -fx-control-inner-background: green;
+    -fx-control-inner-background: lightgreen;
 }
 
 .neispravno{
-    -fx-control-inner-background: red;
+    -fx-control-inner-background: tomato;
 }
