@@ -1,7 +1,5 @@
 package sample;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
@@ -24,30 +22,24 @@ public class Controller {
     public RadioButton redovan;
     public RadioButton redovansam;
     public CheckBox borac;
-    public boolean IspravnoIme;
-    public boolean IspravnoPrezime;
-    public boolean IspravanIndeks;
-    public boolean IspravanJMBG;
-    public boolean IspravanDatum;
-    public boolean IspravanEmail;
-    public boolean IspravanTelefon;
-    public boolean IspravnoMjesto;
+    private boolean IspravnoIme;
+    private boolean IspravnoPrezime;
+    private boolean IspravanIndeks;
+    private boolean IspravanJMBG;
+    private boolean IspravanDatum;
+    private boolean IspravanEmail;
+    private boolean IspravanTelefon;
+    private boolean IspravnoMjesto;
 
-    public boolean testIme(String s) {
+    private boolean testImePrezime(String s) {
         if(s.trim().isEmpty() || s.length()>20) return false;
         for (char c: s.toCharArray())
             if(!Character.isAlphabetic(c)) return false;
         return true;
     }
 
-    public boolean testPrezime(String s) {
-        if(s.trim().isEmpty() || s.length()>20) return false;
-        for (char c: s.toCharArray())
-            if(!Character.isAlphabetic(c)) return false;
-        return true;
-    }
 
-    public boolean testIndeksa(String s) {
+    private boolean testIndeksa(String s) {
         if(s.length()>5) return false;
         for (char c: s.toCharArray())
             if(Character.isAlphabetic(c)) return false;
@@ -73,7 +65,7 @@ public class Controller {
             godina += 2000;
         return godina;
     }
-    public boolean testJMBG(String s) {
+    private boolean testJMBG(String s) {
         int[] mjeseci={31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
         if(s.length()!=13) return false;
         for (char c: s.toCharArray())
@@ -84,11 +76,10 @@ public class Controller {
         if(mjesec<=0 || mjesec>=12) return false;
         if (godina % 400 == 0 || (godina % 100 != 0 && godina % 4 == 0))
             mjeseci[1] = 29;
-        if(dan<=0 || dan>mjeseci[mjesec-1]) return false;
-        return true;
+        return dan > 0 && dan <= mjeseci[mjesec - 1];
     }
 
-    public boolean testDatuma() {
+    private boolean testDatuma() {
         if(datum.getValue()==null) return false;
         if(datum.getValue().getDayOfMonth() != getJmbgDan(getJMBG()) || datum.getValue().getMonthValue() != getJmbgMjesec(getJMBG()) || datum.getValue().getYear() != getJmbgGodina(getJMBG()))
             return false;
@@ -103,13 +94,11 @@ public class Controller {
         for (char c: s.toCharArray())
             if(Character.isAlphabetic(c)) return false;
         int pozivniBroj = Integer.parseInt(s.substring(1, 3));
-        if (!s.substring(0, 1).equals("0") || pozivniBroj < 30 || (pozivniBroj > 39 && pozivniBroj < 49) || (pozivniBroj > 67 && pozivniBroj < 70) || pozivniBroj > 70)
-            return false;
-        return true;
+        return s.substring(0, 1).equals("0") && pozivniBroj >= 30 && (pozivniBroj <= 39 || pozivniBroj >= 49) && (pozivniBroj <= 67 || pozivniBroj >= 70) && pozivniBroj <= 70;
     }
 
     private boolean testEmail(String s) {
-        String ePattern = "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$";
+        String ePattern = "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$";
         java.util.regex.Pattern p = java.util.regex.Pattern.compile(ePattern);
         java.util.regex.Matcher m = p.matcher(s);
         return m.matches();
@@ -143,7 +132,7 @@ public class Controller {
         redovansam.setToggleGroup(radioButtonGrupa);
 
         ime.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (testIme(newValue)) {
+            if (testImePrezime(newValue)) {
                 ime.getStyleClass().removeAll("neispravno");
                 ime.getStyleClass().add("ispravno");
                 IspravnoIme = true;
@@ -155,7 +144,7 @@ public class Controller {
         });
 
         prezime.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (testPrezime(newValue)) {
+            if (testImePrezime((String) newValue)) {
                 prezime.getStyleClass().removeAll("neispravno");
                 prezime.getStyleClass().add("ispravno");
                 IspravnoPrezime = true;
@@ -215,7 +204,7 @@ public class Controller {
         });
 
         mjesto.valueProperty().addListener((observable, oldValue, newValue) -> {
-            if (testMjesta((String) newValue)) {
+            if (testMjesta(newValue)) {
                 mjesto.getStyleClass().removeAll("neispravno");
                 mjesto.getStyleClass().add("ispravno");
                 IspravnoMjesto = true;
@@ -239,7 +228,7 @@ public class Controller {
         });
     }
 
-    public boolean testFormulara() {
+    private boolean testFormulara() {
         return IspravnoIme && IspravnoPrezime && IspravanIndeks && IspravanJMBG && IspravanDatum && IspravanEmail && IspravnoMjesto && IspravanTelefon;
     }
 
